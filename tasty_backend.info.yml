@@ -1,6 +1,6 @@
-name: Tasty Backend Base
+name: Tasty Backend
 type: module
-description: Base module for a Tasty Backend.
+description: Tasty Backend provides a ready made administration experience for day-to-day content administrators.
 core: 8.x
 package: Tasty Backend
 dependencies:

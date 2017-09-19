@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\tasty_backend_base;
+namespace Drupal\tasty_backend;
 
 use Drupal\system\SystemManager;
 

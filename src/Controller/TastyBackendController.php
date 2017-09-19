@@ -1,27 +1,27 @@
 <?php
 
-namespace Drupal\tasty_backend_base\Controller;
+namespace Drupal\tasty_backend\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\tasty_backend_base\TastyBackendManager;
+use Drupal\tasty_backend\TastyBackendManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class TastyBackendBaseController.
+ * Class TastyBackendController.
  */
-class TastyBackendBaseController extends ControllerBase {
+class TastyBackendController extends ControllerBase {
   
   /**
    * Tasty Backend Manager Service.
    *
-   * @var \Drupal\tasty_backend_base\manager\TastyBackendManager
+   * @var \Drupal\tasty_backend\manager\TastyBackendManager
    */
   protected $tastyBackendManager;
   
   /**
-   * Constructs a new TastyBackendBaseController.
+   * Constructs a new TastyBackendController.
    *
-   * @param \Drupal\tasty_backend_base\manager\TastyBackendManager $tastyBackendManager
+   * @param \Drupal\tasty_backend\manager\TastyBackendManager $tastyBackendManager
    *   Tasty Backend Manager service.
    */
   public function __construct(TastyBackendManager $tastyBackendManager) {
@@ -33,7 +33,7 @@ class TastyBackendBaseController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('tasty_backend_base.manager')
+      $container->get('tasty_backend.manager')
     );
   }
 

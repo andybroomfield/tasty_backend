@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\tasty_backend_base\Form;
+namespace Drupal\tasty_backend\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,7 +15,7 @@ class TastyBackendSettingsForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'tasty_backend_base.settings',
+      'tasty_backend.settings',
     ];
   }
 
@@ -30,7 +30,7 @@ class TastyBackendSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('tasty_backend_base.settings');
+    $config = $this->config('tasty_backend.settings');
     $form['apply_default_content_perms'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Apply default content type permissions to content admin role'),
@@ -59,7 +59,7 @@ class TastyBackendSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
-    $this->config('tasty_backend_base.settings')
+    $this->config('tasty_backend.settings')
       ->set('apply_default_content_perms', $form_state->getValue('apply_default_content_perms'))
       ->set('apply_default_vocab_perms', $form_state->getValue('apply_default_vocab_perms'))
       ->save();

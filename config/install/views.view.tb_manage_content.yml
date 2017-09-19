@@ -770,7 +770,7 @@ display:
         title: All
         description: 'Manage all content.'
         expanded: false
-        parent: tasty_backend_base.manage_content_page
+        parent: tasty_backend.manage_content_page
         weight: 1
         context: '0'
         menu_name: tb-manage

@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\tasty_backend_base\Form;
+namespace Drupal\tasty_backend\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\tasty_backend_base\TastyBackendManager;
+use Drupal\tasty_backend\TastyBackendManager;
 
 /**
  * Class TastyBackendReloadAdminViewsForm.

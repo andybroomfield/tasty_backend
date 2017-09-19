@@ -3,17 +3,17 @@
 /**
  * Implements hook_install().
  */
-function tasty_backend_base_install() {
+function tasty_backend_install() {
   
   // Add administration views and default permissions for any enabled content types.
   foreach (\Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple() as $type) {
-    \Drupal\tasty_backend_base\TastyBackendManager::addAdminView($type);
-    \Drupal\tasty_backend_base\TastyBackendManager::addContentTypePermissions($type);
+    \Drupal\tasty_backend\TastyBackendManager::addAdminView($type);
+    \Drupal\tasty_backend\TastyBackendManager::addContentTypePermissions($type);
   }
 
   // Add default permissions for any enabled taxonomy vocabularies.
   foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vocabulary) {
-    \Drupal\tasty_backend_base\TastyBackendManager::addVocabularyPermissions($vocabulary);
+    \Drupal\tasty_backend\TastyBackendManager::addVocabularyPermissions($vocabulary);
   }
 
   // Add default permissions for some core menus.

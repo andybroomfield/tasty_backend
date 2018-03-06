@@ -6,3 +6,7 @@ access tasty backend admin pages:
 administer tasty backend:
   title: 'Administer tasty backend'
   restrict access: TRUE
+
+access default administration menu:
+  title: 'Access default administration menu'
+  restrict access: TRUE

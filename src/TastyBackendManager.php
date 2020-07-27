@@ -2,6 +2,8 @@
 
 namespace Drupal\tasty_backend;
 
+use Drupal\views\Views;
+use Drupal\user\Entity\Role;
 use Drupal\system\SystemManager;
 
 /**
@@ -54,16 +56,16 @@ class TastyBackendManager extends SystemManager {
       'plugin_id' => 'bundle',
       'group' => 1,
     ];
-    
+
     // Duplicate the view.
-    $view = \Drupal\views\Views::getView('tb_manage_content')->storage->createDuplicate();
-    
+    $view = Views::getView('tb_manage_content')->storage->createDuplicate();
+
     // Set some basic info.
     $view->setStatus(TRUE);
     $view->set('id', 'tb_manage_content_' . $type->id());
     $view->set('label', 'Tasty Backend Manage ' . $type->label());
     $view->set('description', 'Tasty Backend administration view to manage all ' . $type->label() . ' content.');
-    
+
     // Set the display options.
     $display = $view->get('display');
     $display['default']['display_options']['access']['options']['perm'] = 'edit any ' . $type->id() . ' content';
@@ -73,7 +75,7 @@ class TastyBackendManager extends SystemManager {
     $display['page_1']['display_options']['menu']['title'] = $type->label();
     $display['page_1']['display_options']['menu']['description'] = 'Manage ' . $type->label() . ' content.';
     $view->set('display', $display);
-    
+
     // Save the new view.
     $view->save();
   }
@@ -99,7 +101,7 @@ class TastyBackendManager extends SystemManager {
    *    The ID of a user role to alter.
    */
   public static function addContentTypePermissions($type, $rid = 'content_admin') {
-    $role = \Drupal\user\Entity\Role::load($rid);
+    $role = Role::load($rid);
     user_role_grant_permissions($rid, [
       'create ' . $type->id() . ' content',
       'delete any ' . $type->id() .  ' content',
@@ -111,7 +113,7 @@ class TastyBackendManager extends SystemManager {
       '@role_name' => $role->label(),
       '@type' => $type->label(),
     ];
-    drupal_set_message(t('Default content type permissions have been added to the @role_name role for the @type content type.', $args));
+    \Drupal::messenger()->addStatus(t('Default content type permissions have been added to the @role_name role for the @type content type.', $args));
   }
 
   /**
@@ -123,7 +125,7 @@ class TastyBackendManager extends SystemManager {
    *    The ID of a user role to alter.
    */
   public static function addVocabularyPermissions($vocabulary, $rid = 'content_admin') {
-    $role = \Drupal\user\Entity\Role::load($rid);
+    $role = Role::load($rid);
     user_role_grant_permissions($rid, [
       'delete terms in ' . $vocabulary->id(),
       'edit terms in ' . $vocabulary->id(),
@@ -134,7 +136,7 @@ class TastyBackendManager extends SystemManager {
       '@role_name' => $role->label(),
       '@vocabulary' => $vocabulary->label(),
     ];
-    drupal_set_message(t('Default vocabulary permissions have been added to the @role_name role for the @vocabulary vocabulary.', $args));
+    \Drupal::messenger()->addStatus(t('Default vocabulary permissions have been added to the @role_name role for the @vocabulary vocabulary.', $args));
   }
 
   /**

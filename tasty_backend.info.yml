@@ -2,6 +2,7 @@ name: Tasty Backend
 type: module
 description: Tasty Backend provides a ready made administration experience for day-to-day content administrators.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Tasty Backend
 dependencies:
   - admin_toolbar

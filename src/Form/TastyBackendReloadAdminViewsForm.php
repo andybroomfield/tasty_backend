@@ -66,7 +66,7 @@ class TastyBackendReloadAdminViewsForm extends FormBase {
         TastyBackendManager::addAdminView($type);
       }
     }
-    drupal_set_message(t('The views have been reloaded.'));
+    $this->messenger()->addStatus(t('The views have been reloaded.'));
   }
 
 }

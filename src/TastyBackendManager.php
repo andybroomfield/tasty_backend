@@ -2,26 +2,69 @@
 
 namespace Drupal\tasty_backend;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Menu\MenuActiveTrailInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\system\SystemManager;
 use Drupal\views\Views;
 use Drupal\user\Entity\Role;
-use Drupal\system\SystemManager;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Tasty Backend Manager Service.
  */
-class TastyBackendManager extends SystemManager {
+class TastyBackendManager {
+
+  /**
+   * Drupal\Core\Messenger\MessengerInterface definition.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * Drupal\system\SystemManager definition.
+   *
+   * @var \Drupal\system\SystemManager
+   */
+  protected $systemManager;
+
+  /**
+   * Drupal\Core\Entity\EntityTypeManagerInterface definition.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The active menu trail service.
+   *
+   * @var \Drupal\Core\Menu\MenuActiveTrailInterface
+   */
+  protected $menuActiveTrail;
+
+  /**
+   * Constructs a new TastyBackendManagerNew object.
+   */
+  public function __construct(MessengerInterface $messenger, SystemManager $system_manager, EntityTypeManagerInterface $entity_type_manager, MenuActiveTrailInterface $menu_active_trail) {
+    $this->messenger = $messenger;
+    $this->systemManager = $system_manager;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->menuActiveTrail = $menu_active_trail;
+  }
 
   /**
    * Loads the contents of a menu block.
    *
-   * Overridden from SystemManager to set the Tasty Backend 'Manage' menu.
+   * Set the Tasty Backend 'Manage' menu. Based on getBlockContents
+   * from system.manager service.
    *
    * @return array
    *   A render array suitable for drupal_render.
    */
   public function getBlockContents() {
     $link = $this->menuActiveTrail->getActiveLink('tb-manage');
-    if ($link && $content = $this->getAdminBlock($link)) {
+    if ($link && $content = $this->systemManager->getAdminBlock($link)) {
       $output = [
         '#theme' => 'admin_block_content',
         '#content' => $content,
@@ -39,9 +82,9 @@ class TastyBackendManager extends SystemManager {
    * Add a new administration view for a content type.
    *
    * @param Drupal\node\Entity\NodeType $type
-   *    Drupal NodeType object.
+   *   Drupal NodeType object.
    */
-  public static function addAdminView($type) {
+  public static function addAdminView(NodeType $type) {
 
     // Default view doesn't have any type set.
     $type_filter = [
@@ -96,9 +139,9 @@ class TastyBackendManager extends SystemManager {
    * Add default permissions for a content type.
    *
    * @param Drupal\node\Entity\NodeType $type
-   *    Drupal NodeType object.
+   *   Drupal NodeType object.
    * @param $rid
-   *    The ID of a user role to alter.
+   *   The ID of a user role to alter.
    */
   public static function addContentTypePermissions($type, $rid = 'content_admin') {
     $role = Role::load($rid);
@@ -120,9 +163,9 @@ class TastyBackendManager extends SystemManager {
    * Add default permissions for a taxonomy vocabulary.
    *
    * @param Drupal\taxonomy\Entity\Vocabulary $vocabulary
-   *    Drupal Vocabulary object.
+   *   Drupal Vocabulary object.
    * @param $rid
-   *    The ID of a user role to alter.
+   *   The ID of a user role to alter.
    */
   public static function addVocabularyPermissions($vocabulary, $rid = 'content_admin') {
     $role = Role::load($rid);
@@ -141,10 +184,11 @@ class TastyBackendManager extends SystemManager {
 
   /**
    * Load all Tasty Backend content management views.
+   *
    * @param $content_type
-   *    Optional. Machine name of content type.
+   *   Optional. Machine name of content type.
    * @return object or array
-   *    An individual view object if $content_type is set, otherwise an array of all tasty backend content management views.
+   *   An individual view object if $content_type is set, otherwise an array of all tasty backend content management views.
    */
   public static function loadContentManageViews($content_type = NULL) {
     $views = \Drupal::entityTypeManager()->getStorage('view')->loadMultiple();

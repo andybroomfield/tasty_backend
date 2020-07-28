@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * @file
+ * Tasty Backend install file.
+ */
+
 use Drupal\tasty_backend\TastyBackendManager;
+
 /**
  * Implements hook_install().
  */
 function tasty_backend_install() {
-  
-  // Add administration views and default permissions for any enabled content types.
+
+  // Add administration views and default permissions for any enabled
+  // content types.
   foreach (\Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple() as $type) {
     TastyBackendManager::addAdminView($type);
     TastyBackendManager::addContentTypePermissions($type);

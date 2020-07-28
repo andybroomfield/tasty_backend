@@ -170,9 +170,10 @@ class TastyBackendManager {
   public static function addVocabularyPermissions($vocabulary, $rid = 'content_admin') {
     $role = Role::load($rid);
     user_role_grant_permissions($rid, [
+      'create terms in ' . $vocabulary->id(),
       'delete terms in ' . $vocabulary->id(),
       'edit terms in ' . $vocabulary->id(),
-      'add terms in ' . $vocabulary->id(),
+      'view terms in ' . $vocabulary->id(),
       'reorder terms in ' . $vocabulary->id(),
     ]);
     $args = [

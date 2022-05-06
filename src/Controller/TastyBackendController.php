@@ -7,17 +7,17 @@ use Drupal\tasty_backend\TastyBackendManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class TastyBackendController.
+ * Controller for Tasty Backend.
  */
 class TastyBackendController extends ControllerBase {
-  
+
   /**
    * Tasty Backend Manager Service.
    *
    * @var \Drupal\tasty_backend\manager\TastyBackendManager
    */
   protected $tastyBackendManager;
-  
+
   /**
    * Constructs a new TastyBackendController.
    *
@@ -27,7 +27,7 @@ class TastyBackendController extends ControllerBase {
   public function __construct(TastyBackendManager $tastyBackendManager) {
     $this->tastyBackendManager = $tastyBackendManager;
   }
-  
+
   /**
    * {@inheritdoc}
    */

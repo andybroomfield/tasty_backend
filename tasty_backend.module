@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @file
+ * Primary module hooks for Tasty Backend module.
+ */
+
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\tasty_backend\TastyBackendManager;
 
 /**
@@ -22,49 +28,49 @@ function tasty_backend_menu_links_discovered_alter(&$links) {
 
   // Add node links for each content type.
   foreach (\Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple() as $type) {
-    $links['tasty_backend.node.add.' . $type->id()] = array(
-      'title' => t($type->label()),
+    $links['tasty_backend.node.add.' . $type->id()] = [
+      'title' => $type->label(),
       'route_name' => 'node.add',
       'parent' => 'tasty_backend.add_content',
       'menu_name' => 'tb-manage',
-      'route_parameters' => array('node_type' => $type->id()),
-    );
+      'route_parameters' => ['node_type' => $type->id()],
+    ];
   }
 
   // Links for taxonomy vocabularies.
-  foreach (\Drupal\taxonomy\Entity\Vocabulary::loadMultiple() as $vocab) {
-    $links['tasty_backend.entity.taxonomy_vocabulary.overview_form.' . $vocab->id()] = array(
-      'title' => t($vocab->label()),
+  foreach (Vocabulary::loadMultiple() as $vocab) {
+    $links['tasty_backend.entity.taxonomy_vocabulary.overview_form.' . $vocab->id()] = [
+      'title' => $vocab->label(),
       'route_name' => 'entity.taxonomy_vocabulary.overview_form',
       'parent' => 'tasty_backend.taxonomy_vocabulary.collection',
       'menu_name' => 'tb-manage',
-      'route_parameters' => array('taxonomy_vocabulary' => $vocab->id()),
-    );
-    $links['tasty_backend.entity.taxonomy_term.add_form.' . $vocab->id()] = array(
+      'route_parameters' => ['taxonomy_vocabulary' => $vocab->id()],
+    ];
+    $links['tasty_backend.entity.taxonomy_term.add_form.' . $vocab->id()] = [
       'title' => t('Add term'),
       'route_name' => 'entity.taxonomy_term.add_form',
       'parent' => 'tasty_backend.entity.taxonomy_vocabulary.overview_form.' . $vocab->id(),
       'menu_name' => 'tb-manage',
-      'route_parameters' => array('taxonomy_vocabulary' => $vocab->id()),
-    );
+      'route_parameters' => ['taxonomy_vocabulary' => $vocab->id()],
+    ];
   }
 
   // Links for menus.
   foreach (menu_ui_get_menus() as $machine_name => $label) {
-    $links['tasty_backend.entity.menu.edit_form.' . $machine_name] = array(
+    $links['tasty_backend.entity.menu.edit_form.' . $machine_name] = [
       'title' => $label,
       'route_name' => 'entity.menu.edit_form',
       'menu_name' => 'tb-manage',
       'parent' => 'tasty_backend.menu.collection',
-      'route_parameters' => array('menu' => $machine_name),
-    );
-    $links['tasty_backend.entity.menu.add_link_form.' . $machine_name] = array(
+      'route_parameters' => ['menu' => $machine_name],
+    ];
+    $links['tasty_backend.entity.menu.add_link_form.' . $machine_name] = [
       'title' => t('Add link'),
       'route_name' => 'entity.menu.add_link_form',
       'menu_name' => 'tb-manage',
       'parent' => 'tasty_backend.entity.menu.edit_form.' . $machine_name,
-      'route_parameters' => array('menu' => $machine_name),
-    );
+      'route_parameters' => ['menu' => $machine_name],
+    ];
   }
 }
 

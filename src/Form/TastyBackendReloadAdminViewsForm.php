@@ -7,10 +7,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\tasty_backend\TastyBackendManager;
 
 /**
- * Class TastyBackendReloadAdminViewsForm.
+ * Tasty Backend reload admin views form.
  */
 class TastyBackendReloadAdminViewsForm extends FormBase {
-
 
   /**
    * {@inheritdoc}
@@ -25,7 +24,7 @@ class TastyBackendReloadAdminViewsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $markup = '<p>' . $this->t('<strong>Be careful!</strong> This will wipe out any customisations made to your content type administration views, and re-create them based on the Tasty Backend Manage Content view.') . '</p>';
     $markup .= '<p>' . $this->t('Any customisations made to the Tasty Backend Manage Content view will be applied to all selected views.') . '</p>';
-    $form['intro'] =[
+    $form['intro'] = [
       '#markup' => $markup,
     ];
     $options = [];
@@ -66,7 +65,7 @@ class TastyBackendReloadAdminViewsForm extends FormBase {
         TastyBackendManager::addAdminView($type);
       }
     }
-    $this->messenger()->addStatus(t('The views have been reloaded.'));
+    $this->messenger()->addStatus($this->t('The views have been reloaded.'));
   }
 
 }

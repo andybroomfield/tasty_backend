@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class TastyBackendSettingsForm.
+ * Tasty Backend settings form.
  */
 class TastyBackendSettingsForm extends ConfigFormBase {
 

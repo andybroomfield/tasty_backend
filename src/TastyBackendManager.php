@@ -9,6 +9,7 @@ use Drupal\system\SystemManager;
 use Drupal\views\Views;
 use Drupal\user\Entity\Role;
 use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Tasty Backend Manager Service.
@@ -140,15 +141,15 @@ class TastyBackendManager {
    *
    * @param Drupal\node\Entity\NodeType $type
    *   Drupal NodeType object.
-   * @param $rid
+   * @param mixed $rid
    *   The ID of a user role to alter.
    */
-  public static function addContentTypePermissions($type, $rid = 'content_admin') {
+  public static function addContentTypePermissions(NodeType $type, $rid = 'content_admin') {
     $role = Role::load($rid);
     user_role_grant_permissions($rid, [
       'create ' . $type->id() . ' content',
-      'delete any ' . $type->id() .  ' content',
-      'edit any ' . $type->id() .  ' content',
+      'delete any ' . $type->id() . ' content',
+      'edit any ' . $type->id() . ' content',
       'override ' . $type->id() . ' published option',
       'view any unpublished ' . $type->id() . ' content',
     ]);
@@ -164,10 +165,10 @@ class TastyBackendManager {
    *
    * @param Drupal\taxonomy\Entity\Vocabulary $vocabulary
    *   Drupal Vocabulary object.
-   * @param $rid
+   * @param mixed $rid
    *   The ID of a user role to alter.
    */
-  public static function addVocabularyPermissions($vocabulary, $rid = 'content_admin') {
+  public static function addVocabularyPermissions(Vocabulary $vocabulary, $rid = 'content_admin') {
     $role = Role::load($rid);
     user_role_grant_permissions($rid, [
       'create terms in ' . $vocabulary->id(),
@@ -186,10 +187,12 @@ class TastyBackendManager {
   /**
    * Load all Tasty Backend content management views.
    *
-   * @param $content_type
+   * @param string $content_type
    *   Optional. Machine name of content type.
-   * @return object or array
-   *   An individual view object if $content_type is set, otherwise an array of all tasty backend content management views.
+   *
+   * @return mixed
+   *   An individual view object if $content_type is set, otherwise an array of
+   *   all tasty backend content management views.
    */
   public static function loadContentManageViews($content_type = NULL) {
     $views = \Drupal::entityTypeManager()->getStorage('view')->loadMultiple();

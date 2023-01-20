@@ -56,20 +56,21 @@ function tasty_backend_menu_links_discovered_alter(&$links) {
   }
 
   // Links for menus.
-  foreach (menu_ui_get_menus() as $machine_name => $label) {
-    $links['tasty_backend.entity.menu.edit_form.' . $machine_name] = [
-      'title' => $label,
+  $menus = \Drupal::entityTypeManager()->getStorage('menu')->loadMultiple();
+  foreach ($menus as $menu_name => $menu) {
+    $links['tasty_backend.entity.menu.edit_form.' . $menu_name] = [
+      'title' => $menu->label(),
       'route_name' => 'entity.menu.edit_form',
       'menu_name' => 'tb-manage',
       'parent' => 'tasty_backend.menu.collection',
-      'route_parameters' => ['menu' => $machine_name],
+      'route_parameters' => ['menu' => $menu_name],
     ];
-    $links['tasty_backend.entity.menu.add_link_form.' . $machine_name] = [
+    $links['tasty_backend.entity.menu.add_link_form.' . $menu_name] = [
       'title' => t('Add link'),
       'route_name' => 'entity.menu.add_link_form',
       'menu_name' => 'tb-manage',
-      'parent' => 'tasty_backend.entity.menu.edit_form.' . $machine_name,
-      'route_parameters' => ['menu' => $machine_name],
+      'parent' => 'tasty_backend.entity.menu.edit_form.' . $menu_name,
+      'route_parameters' => ['menu' => $menu_name],
     ];
   }
 }

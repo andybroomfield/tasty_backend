@@ -25,11 +25,11 @@ function tasty_backend_install() {
   }
 
   // Add default permissions for some core menus.
-  $menus = menu_ui_get_menus();
-  foreach ($menus as $menu => $name) {
-    if ($menu == 'main' || $menu == 'footer') {
+  $menus = \Drupal::entityTypeManager()->getStorage('menu')->loadMultiple();
+  foreach ($menus as $menu_name => $menu) {
+    if ($menu_name == 'main' || $menu_name == 'footer') {
       user_role_grant_permissions('content_admin', [
-        'administer ' . $menu . ' menu items',
+        'administer ' . $menu_name . ' menu items',
       ]);
     }
   }

@@ -5,20 +5,20 @@ core: 8.x
 core_version_requirement: ^8 || ^9 || ^10
 package: Tasty Backend
 dependencies:
-  - admin_toolbar
-  - admin_toolbar_tools
-  - contextual
-  - history
-  - menu_admin_per_menu
-  - menu_ui
-  - node
-  - override_node_options
-  - path
-  - role_delegation
-  - taxonomy_access_fix
-  - toolbar_menu
-  - view_unpublished
-  - views
+  - admin_toolbar:admin_toolbar
+  - admin_toolbar:admin_toolbar_tools
+  - drupal:contextual
+  - drupal:history
+  - drupal:menu_ui
+  - drupal:node
+  - drupal:path
+  - drupal:views
+  - menu_admin_per_menu:menu_admin_per_menu
+  - override_node_options:override_node_options
+  - role_delegation:role_delegation
+  - taxonomy_access_fix:taxonomy_access_fix
+  - toolbar_menu:toolbar_menu
+  - view_unpublished:view_unpublished
 
 config_devel:
   - user.role.content_admin

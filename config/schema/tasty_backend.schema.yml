@@ -1,0 +1,10 @@
+tasty_backend.settings:
+  type: config_object
+  label: 'Tasty backend settings'
+  mapping:
+    apply_default_content_perms:
+      type: integer
+      label: "Apply default content type permissions to content admin role"
+    apply_default_vocab_perms:
+      type: integer
+      label: "Apply default vocabulary permissions to content admin role"

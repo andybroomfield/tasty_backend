@@ -3,12 +3,22 @@ status: true
 dependencies:
   module:
     - contextual
+  config:
+    - system.menu.tb-manage
+    - toolbar_menu.toolbar_menu_element.tb_manage
+  module:
+    - contextual
+    - menu_admin_per_menu
+    - node
+    - override_node_options
     - path
     - system
     - tasty_backend
     - taxonomy
+    - taxonomy_access_fix
     - toolbar
     - toolbar_menu
+    - view_unpublished
 id: content_admin
 label: 'Content admin'
 weight: 3

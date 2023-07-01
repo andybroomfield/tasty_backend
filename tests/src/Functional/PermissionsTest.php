@@ -127,6 +127,7 @@ class PermissionsTest extends BrowserTestBase {
     // Check user admin cannot edit the published page.
     $this->drupalGet($published_node_edit_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
+
     // @todo Test node options are accessible here.
 
     // Check user admin cannot delete the published page.
@@ -135,6 +136,56 @@ class PermissionsTest extends BrowserTestBase {
 
     // Check user admin cannot view the unpublished page.
     $this->drupalGet($unpublished_node_url);
+    $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
+  }
+
+  public function testUserManagementPermissions() {
+
+    // Set up an authenticated user for this test.
+    $authenticated_user = $this->drupalCreateUser();
+    $authenticated_user_edit_url = $authenticated_user->toUrl('edit-form')->toString();
+    $authenticated_user_cancel_url = $authenticated_user->toUrl('cancel-form')->toString();
+
+    // Login as user admin user.
+    $this->drupalLogin($this->userAdmin);
+
+    // Check user admin can access user view
+    $this->drupalGet('/admin/manage/users');
+    $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
+
+    // Check user admin can access create a user
+    $this->drupalGet('/admin/manage/users/create');
+    $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
+
+    // Check user admin can edit a user
+    $this->drupalGet($authenticated_user_edit_url);
+    $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
+
+    // @todo Add check for assigning roles.
+
+    // Check user admin can delete a user
+    $this->drupalGet($authenticated_user_cancel_url);
+    $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
+
+    $this->drupalLogout();
+
+    // Login as content admin user.
+    $this->drupalLogin($this->contentAdmin);
+
+    // Check content admin cannot access user view
+    $this->drupalGet('/admin/manage/users');
+    $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
+
+    // Check content admin cannot access create a user
+    $this->drupalGet('/admin/manage/users/create');
+    $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
+
+    // Check content admin cannot edit a user
+    $this->drupalGet($authenticated_user_edit_url);
+    $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
+
+    // Check content admin cannot delete a user
+    $this->drupalGet($authenticated_user_cancel_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
   }
 }

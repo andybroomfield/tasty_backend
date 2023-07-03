@@ -1,6 +1,14 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - contextual
+    - path
+    - system
+    - tasty_backend
+    - taxonomy
+    - toolbar
+    - toolbar_menu
 id: content_admin
 label: 'Content admin'
 weight: 3

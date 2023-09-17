@@ -125,6 +125,7 @@ class AdminViewsTest extends BrowserTestBase {
     foreach ($nodes as $node) {
       $node->delete();
     }
+
     foreach ($types as $type) {
 
       // Delete the content type.
@@ -143,6 +144,7 @@ class AdminViewsTest extends BrowserTestBase {
       // Check view returns 404.
       $this->assertSession()->statusCodeEquals(Response::HTTP_NOT_FOUND);
     }
+
   }
 
 }

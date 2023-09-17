@@ -107,6 +107,7 @@ function tasty_backend_entity_bundle_delete($entity_type_id, $bundle) {
 
   if ($entity_type_id == 'node') {
     TastyBackendManager::deleteAdminView($bundle);
+    TastyBackendManager::removeExtraContentTypePermissions($bundle);
   }
 }
 

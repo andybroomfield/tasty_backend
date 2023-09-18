@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - contextual
   config:
     - system.menu.tb-manage
     - toolbar_menu.toolbar_menu_element.tb_manage

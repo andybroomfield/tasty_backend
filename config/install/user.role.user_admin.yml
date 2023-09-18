@@ -1,6 +1,8 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.content_admin
   module:
     - contextual
     - role_delegation

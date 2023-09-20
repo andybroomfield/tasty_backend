@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\tasty_backend\Functional;
 
+use Drupal\system\Entity\Menu;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -71,6 +73,47 @@ class ToolbarMenuTest extends BrowserTestBase {
       $this->createContentType($type);
     }
 
+    // Add taxonomy vocabularies.
+    $taxonomies = [
+      [
+        'vid' => 'test_taxonomy_1_' . strtolower($this->randomMachineName(8)),
+        'name' => 'Test Taxonomy 1 - ' . $this->randomMachineName(8),
+      ],
+      [
+        'vid' => 'test_taxonomy_2_' . strtolower($this->randomMachineName(8)),
+        'name' => 'Test Taxonomy 2 - ' . $this->randomMachineName(8),
+      ],
+      [
+        'vid' => 'test_taxonomy_3_' . strtolower($this->randomMachineName(8)),
+        'name' => 'Test Taxonomy 3 - ' . $this->randomMachineName(8),
+      ],
+    ];
+    foreach ($taxonomies as $taxonomy) {
+      Vocabulary::create($taxonomy)->save();
+    }
+
+    // Add menus.
+    $menus = [
+      [
+        'id' => 'test_menu_1_' . strtolower($this->randomMachineName(8)),
+        'label' => 'Test Menu 1 - ' . $this->randomMachineName(8),
+      ],
+      [
+        'id' => 'test_menu_2_' . strtolower($this->randomMachineName(8)),
+        'label' => 'Test Menu 2 - ' . $this->randomMachineName(8),
+      ],
+      [
+        'id' => 'test_menu_3_' . strtolower($this->randomMachineName(8)),
+        'label' => 'Test Menu 3 - ' . $this->randomMachineName(8),
+      ],
+    ];
+    foreach ($menus as $menu) {
+      Menu::create($menu)->save();
+      user_role_grant_permissions('content_admin', [
+        'administer ' . $menu['id'] . ' menu items',
+      ]);
+    }
+
     // Caches need to be flushed after creating types.
     // @todo check if this is required in main module or just the test.
     drupal_flush_all_caches();
@@ -108,6 +151,51 @@ class ToolbarMenuTest extends BrowserTestBase {
       $value = $query[0]->getText();
       $this->assertEquals('admin/manage/content/' . $type['type'], $path);
       $this->assertEquals($type['name'], $value);
+    }
+
+    // Check the taxonomy menu exists.
+    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]');
+    $path = $query[0]->getAttribute('data-drupal-link-system-path');
+    $title = $query[0]->getText();
+    $this->assertEquals('admin/structure/taxonomy', $path);
+    $this->assertEquals('Taxonomy', $title);
+
+    // Check the taxonomy links are present for each vocabulary.
+    foreach ($taxonomies as $taxonomy) {
+
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/structure/taxonomy/manage/' . $taxonomy['vid'] . '/overview"]');
+      $path = $query[0]->getAttribute('data-drupal-link-system-path');
+      $value = $query[0]->getText();
+      $this->assertEquals('admin/structure/taxonomy/manage/' . $taxonomy['vid'] . '/overview', $path);
+      $this->assertEquals($taxonomy['name'], $value);
+    }
+
+    // Check the menus menu exists.
+    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]');
+    $path = $query[0]->getAttribute('data-drupal-link-system-path');
+    $title = $query[0]->getText();
+    $this->assertEquals('admin/structure/menu', $path);
+    $this->assertEquals('Menus', $title);
+
+    // Check the menu links are present for each menu.
+    $default_menus = [
+      [
+        'id' => 'main',
+        'label' => 'Main navigation',
+      ],
+      [
+        'id' => 'footer',
+        'label' => 'Footer',
+      ],
+    ];
+    $menus = array_merge($menus, $default_menus);
+    foreach ($menus as $menu) {
+
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/structure/menu/manage/' . $menu['id'] . '"]');
+      $path = $query[0]->getAttribute('data-drupal-link-system-path');
+      $value = $query[0]->getText();
+      $this->assertEquals('admin/structure/menu/manage/' . $menu['id'], $path);
+      $this->assertEquals($menu['label'], $value);
     }
   }
 }

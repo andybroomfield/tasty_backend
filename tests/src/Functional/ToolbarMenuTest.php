@@ -122,14 +122,16 @@ class ToolbarMenuTest extends BrowserTestBase {
     $this->drupalLogin($this->contentAdmin);
 
     // Check the Add content menu item is present.
-    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/node/add"]');
+    $add_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/node/add"]';
+    $query = $this->xpath($add_content_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getAttribute('title');
     $this->assertEquals('node/add', $path);
     $this->assertEquals('Add content', $title);
 
     // Check the Manage content menu item is present.
-    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/content"]');
+    $manage_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/content"]';
+    $query = $this->xpath($manage_content_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getAttribute('title');
     $this->assertEquals('admin/manage/content', $path);
@@ -154,7 +156,8 @@ class ToolbarMenuTest extends BrowserTestBase {
     }
 
     // Check the taxonomy menu exists.
-    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]');
+    $taxonomy_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]';
+    $query = $this->xpath($taxonomy_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getText();
     $this->assertEquals('admin/structure/taxonomy', $path);
@@ -171,7 +174,8 @@ class ToolbarMenuTest extends BrowserTestBase {
     }
 
     // Check the menus menu exists.
-    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]');
+    $menu_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]';
+    $query = $this->xpath($menu_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getText();
     $this->assertEquals('admin/structure/menu', $path);
@@ -197,5 +201,40 @@ class ToolbarMenuTest extends BrowserTestBase {
       $this->assertEquals('admin/structure/menu/manage/' . $menu['id'], $path);
       $this->assertEquals($menu['label'], $value);
     }
+
+    // Check user menu is not visible.
+    $user_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/users"]';
+    $query = $this->xpath($user_xpath);
+    $this->assertEmpty($query);
+
+    // Log out as content admin.
+    $this->drupalLogout();
+
+    // Login as user admin user.
+    $this->drupalLogin($this->userAdmin);
+
+    // Check content menus are not visible.
+    $query = $this->xpath($add_content_xpath);
+    $this->assertEmpty($query);
+    $query = $this->xpath($manage_content_xpath);
+    $this->assertEmpty($query);
+    $query = $this->xpath($taxonomy_xpath);
+    $this->assertEmpty($query);
+    $query = $this->xpath($menu_xpath);
+    $this->assertEmpty($query);
+
+    // Check the manage user menu is present.
+    $query = $this->xpath($user_xpath);
+    $path = $query[0]->getAttribute('data-drupal-link-system-path');
+    $title = $query[0]->getText();
+    $this->assertEquals('admin/manage/users', $path);
+    $this->assertEquals('Users', $title);
+
+    // Check the add user link is present.
+    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/users"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/manage/users/create"]');
+    $path = $query[0]->getAttribute('data-drupal-link-system-path');
+    $title = $query[0]->getText();
+    $this->assertEquals('admin/manage/users/create', $path);
+    $this->assertEquals('Add user', $title);
   }
 }

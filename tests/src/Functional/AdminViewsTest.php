@@ -36,7 +36,7 @@ class AdminViewsTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-  
+
     // Set up content admin user.
     $this->contentAdmin = $this->drupalCreateUser();
     $this->contentAdmin->addRole('content_admin');
@@ -47,7 +47,7 @@ class AdminViewsTest extends BrowserTestBase {
    * Content type admin views set are set up.
    */
   public function testContentTypeAdminViews() {
-    
+
     // Create content types.
     $types = [
       [
@@ -137,7 +137,7 @@ class AdminViewsTest extends BrowserTestBase {
       // Caches need to be flushed after deleting types.
       // @todo check if this is required in main module or just the test.
       drupal_flush_all_caches();
-      
+
       // Go to the manage content view of the content type.
       $this->drupalGet('/admin/manage/content/' . $type['type']);
 

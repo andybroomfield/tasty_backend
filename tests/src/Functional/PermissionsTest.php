@@ -43,7 +43,7 @@ class PermissionsTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-  
+
     // Set up content admin user.
     $this->contentAdmin = $this->drupalCreateUser();
     $this->contentAdmin->addRole('content_admin');
@@ -59,12 +59,12 @@ class PermissionsTest extends BrowserTestBase {
    * Content type permissions.
    */
   public function testContentTypePermissions() {
-    
+
     // Create content types.
     $type = [
       'type' => 'test_type_1_' . strtolower($this->randomMachineName(8)),
       'name' => 'Test Type 1 - ' . $this->randomMachineName(8),
-    ];;
+    ];
     $this->createContentType($type);
 
     // Caches need to be flushed after creating types.
@@ -129,7 +129,6 @@ class PermissionsTest extends BrowserTestBase {
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
 
     // @todo Test node options are accessible here.
-
     // Check user admin cannot delete the published page.
     $this->drupalGet($published_node_delete_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
@@ -139,6 +138,9 @@ class PermissionsTest extends BrowserTestBase {
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
   }
 
+  /**
+   * User management permissions.
+   */
   public function testUserManagementPermissions() {
 
     // Set up an authenticated user for this test.
@@ -149,21 +151,20 @@ class PermissionsTest extends BrowserTestBase {
     // Login as user admin user.
     $this->drupalLogin($this->userAdmin);
 
-    // Check user admin can access user view
+    // Check user admin can access user view.
     $this->drupalGet('/admin/manage/users');
     $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
 
-    // Check user admin can access create a user
+    // Check user admin can access create a user.
     $this->drupalGet('/admin/manage/users/create');
     $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
 
-    // Check user admin can edit a user
+    // Check user admin can edit a user.
     $this->drupalGet($authenticated_user_edit_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
 
     // @todo Add check for assigning roles.
-
-    // Check user admin can delete a user
+    // Check user admin can delete a user.
     $this->drupalGet($authenticated_user_cancel_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_OK);
 
@@ -172,20 +173,21 @@ class PermissionsTest extends BrowserTestBase {
     // Login as content admin user.
     $this->drupalLogin($this->contentAdmin);
 
-    // Check content admin cannot access user view
+    // Check content admin cannot access user view.
     $this->drupalGet('/admin/manage/users');
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
 
-    // Check content admin cannot access create a user
+    // Check content admin cannot access create a user.
     $this->drupalGet('/admin/manage/users/create');
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
 
-    // Check content admin cannot edit a user
+    // Check content admin cannot edit a user.
     $this->drupalGet($authenticated_user_edit_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
 
-    // Check content admin cannot delete a user
+    // Check content admin cannot delete a user.
     $this->drupalGet($authenticated_user_cancel_url);
     $this->assertSession()->statusCodeEquals(Response::HTTP_FORBIDDEN);
   }
+
 }

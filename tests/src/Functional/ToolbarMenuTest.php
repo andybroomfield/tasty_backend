@@ -122,7 +122,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     $this->drupalLogin($this->contentAdmin);
 
     // Check the Add content menu item is present.
-    $add_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/node/add"]';
+    $add_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/node/add")]';
     $query = $this->xpath($add_content_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getAttribute('title');
@@ -130,7 +130,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     $this->assertEquals('Add content', $title);
 
     // Check the Manage content menu item is present.
-    $manage_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/content"]';
+    $manage_content_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/manage/content")]';
     $query = $this->xpath($manage_content_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getAttribute('title');
@@ -141,14 +141,14 @@ class ToolbarMenuTest extends BrowserTestBase {
     foreach ($types as $type) {
 
       // Check a node/add/type link is present under Add content.
-      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/node/add"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/node/add/' . $type['type'] . '"]');
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/node/add")]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[contains(@href, "/node/add/' . $type['type'] . '")]');
       $path = $query[0]->getAttribute('data-drupal-link-system-path');
       $value = $query[0]->getText();
       $this->assertEquals('node/add/' . $type['type'], $path);
       $this->assertEquals($type['name'], $value);
 
       // Check a admin/manage/content/type link is present under Manage content.
-      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/content"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/manage/content/' . $type['type'] . '"]');
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/manage/content")]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[contains(@href, "/admin/manage/content/' . $type['type'] . '")]');
       $path = $query[0]->getAttribute('data-drupal-link-system-path');
       $value = $query[0]->getText();
       $this->assertEquals('admin/manage/content/' . $type['type'], $path);
@@ -156,7 +156,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     }
 
     // Check the taxonomy menu exists.
-    $taxonomy_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]';
+    $taxonomy_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/structure/taxonomy")]';
     $query = $this->xpath($taxonomy_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getText();
@@ -166,7 +166,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     // Check the taxonomy links are present for each vocabulary.
     foreach ($taxonomies as $taxonomy) {
 
-      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/taxonomy"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/structure/taxonomy/manage/' . $taxonomy['vid'] . '/overview"]');
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/structure/taxonomy")]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[contains(@href, "/admin/structure/taxonomy/manage/' . $taxonomy['vid'] . '/overview")]');
       $path = $query[0]->getAttribute('data-drupal-link-system-path');
       $value = $query[0]->getText();
       $this->assertEquals('admin/structure/taxonomy/manage/' . $taxonomy['vid'] . '/overview', $path);
@@ -174,7 +174,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     }
 
     // Check the menus menu exists.
-    $menu_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]';
+    $menu_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/structure/menu")]';
     $query = $this->xpath($menu_xpath);
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getText();
@@ -195,7 +195,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     $menus = array_merge($menus, $default_menus);
     foreach ($menus as $menu) {
 
-      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/structure/menu"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/structure/menu/manage/' . $menu['id'] . '"]');
+      $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/structure/menu")]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[contains(@href, "/admin/structure/menu/manage/' . $menu['id'] . '")]');
       $path = $query[0]->getAttribute('data-drupal-link-system-path');
       $value = $query[0]->getText();
       $this->assertEquals('admin/structure/menu/manage/' . $menu['id'], $path);
@@ -203,7 +203,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     }
 
     // Check user menu is not visible.
-    $user_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/users"]';
+    $user_xpath = './/*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/manage/users")]';
     $query = $this->xpath($user_xpath);
     $this->assertEmpty($query);
 
@@ -231,7 +231,7 @@ class ToolbarMenuTest extends BrowserTestBase {
     $this->assertEquals('Users', $title);
 
     // Check the add user link is present.
-    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[@href="/admin/manage/users"]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[@href="/admin/manage/users/create"]');
+    $query = $this->xpath('.//*[@id="toolbar-item-toolbar-menu-tb-manage-tray"]//*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/*[contains(@href, "/admin/manage/users")]/following-sibling::*[1]/self::*[contains(concat(" ",normalize-space(@class)," ")," toolbar-menu ")]/*[contains(concat(" ",normalize-space(@class)," ")," menu-item ")]/a[contains(@href, "/admin/manage/users/create")]');
     $path = $query[0]->getAttribute('data-drupal-link-system-path');
     $title = $query[0]->getText();
     $this->assertEquals('admin/manage/users/create', $path);

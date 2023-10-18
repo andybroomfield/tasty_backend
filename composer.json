@@ -17,5 +17,13 @@
     "issues": "https://www.drupal.org/project/issues/tasty_backend",
     "source": "http://cgit.drupalcode.org/tasty_backend"
   },
-  "require": { }
+  "require": {
+    "drupal/admin_toolbar": "^3.4",
+    "drupal/menu_admin_per_menu": "^1.5",
+    "drupal/override_node_options": "^2.7",
+    "drupal/role_delegation": "^1.2",
+    "drupal/taxonomy_access_fix": "^4.0",
+    "drupal/toolbar_menu": "^3.0",
+    "drupal/view_unpublished": "^1.1"
+  }
 }

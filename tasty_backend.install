@@ -10,27 +10,40 @@ use Drupal\tasty_backend\TastyBackendManager;
 /**
  * Implements hook_install().
  */
-function tasty_backend_install() {
+function tasty_backend_install($is_syncing) {
 
-  // Add administration views and default permissions for any enabled
-  // content types.
-  foreach (\Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple() as $type) {
-    TastyBackendManager::addAdminView($type);
-    TastyBackendManager::addContentTypePermissions($type);
-  }
+  if (!$is_syncing) {
+    // Add administration views and default permissions for any enabled
+    // content types.
+    foreach (\Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple() as $type) {
+      TastyBackendManager::addAdminView($type);
+      TastyBackendManager::addContentTypePermissions($type);
+    }
 
-  // Add default permissions for any enabled taxonomy vocabularies.
-  foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vocabulary) {
-    TastyBackendManager::addVocabularyPermissions($vocabulary);
-  }
+    // Add default permissions for any enabled taxonomy vocabularies.
+    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vocabulary) {
+      TastyBackendManager::addVocabularyPermissions($vocabulary);
+    }
 
-  // Add default permissions for some core menus.
-  $menus = \Drupal::entityTypeManager()->getStorage('menu')->loadMultiple();
-  foreach ($menus as $menu_name => $menu) {
-    if ($menu_name == 'main' || $menu_name == 'footer') {
-      user_role_grant_permissions('content_admin', [
-        'administer ' . $menu_name . ' menu items',
-      ]);
+    // Add default permissions for some core menus.
+    $menus = \Drupal::entityTypeManager()->getStorage('menu')->loadMultiple();
+    foreach ($menus as $menu_name => $menu) {
+      if ($menu_name == 'main' || $menu_name == 'footer') {
+        user_role_grant_permissions('content_admin', [
+          'administer ' . $menu_name . ' menu items',
+        ]);
+      }
+    }
+
+    // Add role assign roles to user manager.
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
+    foreach ($roles as $role) {
+      $role_id = $role->id();
+      if ($role_id == 'content_admin' || $role_id == 'user_admin') {
+        user_role_grant_permissions('user_admin', [
+          'assign ' . $role_id . ' role'
+        ]);
+      }
     }
   }
 }

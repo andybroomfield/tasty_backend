@@ -161,6 +161,26 @@ class TastyBackendManager {
   }
 
   /**
+   * Remove extra permissions for a content type.
+   *
+   * Node override and view any unpublished permissions need to be removed
+   * when the node type is deleted. This is required as permissions sometimes
+   * arn't removed when a content type is deleted, causing a
+   * 'Non-existent permissions' error on Drupal 10.
+   *
+   * @param string $bundle
+   *   Bundle label that was deleted.
+   * @param mixed $rid
+   *   The ID of a user role to alter.
+   */
+  public static function removeExtraContentTypePermissions(string $bundle, $rid = 'content_admin') {
+    user_role_revoke_permissions($rid, [
+      'override ' . $bundle. ' published option',
+      'view any unpublished ' . $bundle . ' content',
+    ]);
+  }
+
+  /**
    * Add default permissions for a taxonomy vocabulary.
    *
    * @param Drupal\taxonomy\Entity\Vocabulary $vocabulary

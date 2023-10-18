@@ -1,6 +1,14 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - user.role.content_admin
+  module:
+    - contextual
+    - role_delegation
+    - system
+    - toolbar
+    - toolbar_menu
 id: user_admin
 label: 'User admin'
 weight: 4
@@ -11,6 +19,5 @@ permissions:
   - 'access user profiles'
   - 'administer users'
   - 'assign content_admin role'
-  - 'assign user_admin role'
   - 'view tb_manage in toolbar'
   - 'view the administration theme'
